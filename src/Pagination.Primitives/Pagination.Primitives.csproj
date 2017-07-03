@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net45;netstandard1.0</TargetFrameworks>
+    <PackageId>Pagination.Primitives</PackageId>
+    <PackageVersion>1.0.0</PackageVersion>
+    <Authors>Hugh Bellamy</Authors>
+    <Title>Pagination.Primitives</Title>
+    <Description>An abstraction layer for supporting pagination.</Description>
+    <PackageProjectUrl>https://github.com/hughbe/facebook.net</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/hughbe/facebook.net</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseUrl>https://github.com/hughbe/Facebook.NET/blob/master/LICENSE</PackageLicenseUrl>
+    <Copyright>Copyright 2017 (c) Hugh Bellamy. All rights reserved.</Copyright>
+    <PackageTags>pagination pagination.primitives</PackageTags>
+    <PackageReleaseNotes>Initial release.</PackageReleaseNotes>
+  </PropertyGroup>
+
+</Project>

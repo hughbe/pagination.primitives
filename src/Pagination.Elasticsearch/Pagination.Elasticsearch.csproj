@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net46;netstandard1.3</TargetFrameworks>
+    <PackageId>Pagination.Elasticsearch</PackageId>
+    <PackageVersion>1.0.0</PackageVersion>
+    <Authors>Hugh Bellamy</Authors>
+    <Title>Pagination.Elasticsearch</Title>
+    <Description>An abstraction layer for supporting pagination in Elasticsearch.</Description>
+    <PackageProjectUrl>https://github.com/hughbe/pagination-primitives</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/hughbe/pagination-primitives</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseUrl>https://github.com/hughbe/pagination-primitives/blob/master/LICENSE</PackageLicenseUrl>
+    <Copyright>Copyright 2017 (c) Hugh Bellamy. All rights reserved.</Copyright>
+    <PackageTags>pagination pagination.elasticsearch elasticsearch</PackageTags>
+    <PackageReleaseNotes>Initial release.</PackageReleaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NEST" Version="5.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Pagination.Primitives\Pagination.Primitives.csproj" />
+  </ItemGroup>
+
+</Project>
