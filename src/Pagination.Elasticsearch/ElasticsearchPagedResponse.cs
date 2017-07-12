@@ -28,7 +28,8 @@ namespace Pagination.Elasticsearch
             }
 
             // Ask the repository for the previous page.
-            return await Repository.Paged(PageNumber - 1, PageSize, Query, Sort);
+            Result<ElasticsearchPagedResponse<T>> response = await Repository.Paged(PageNumber - 1, PageSize, Query, Sort);
+            return response.Value;
         }
 
         public override async Task<PagedResponse<T>> NextPage()
@@ -40,7 +41,8 @@ namespace Pagination.Elasticsearch
             }
 
             // Ask the repository for the next page.
-            return await Repository.Paged(PageNumber + 1, PageSize, Query, Sort);
+            Result<ElasticsearchPagedResponse<T>> response = await Repository.Paged(PageNumber + 1, PageSize, Query, Sort);
+            return response.Value;
         }
     }
 }

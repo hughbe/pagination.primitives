@@ -39,7 +39,7 @@ namespace Pagination.Elasticsearch
             return data;
         }
 
-        public async Task<T> Get(string id)
+        public async Task<Result<T>> Get(string id)
         {
             if (string.IsNullOrWhiteSpace(id))
             {
@@ -54,21 +54,35 @@ namespace Pagination.Elasticsearch
         private const int DefaultPageSize = 50;
         public const int MaxPageSize = 10000;
 
-        public async Task<bool> Any(object query) => (await Paged(0, 1, query)).Data.Any();
+        public async Task<Result<bool>> Any(object query)
+        {
+            Result<ElasticsearchPagedResponse<T>> result = await Paged(0, 1, query);
+            if (!result)
+            {
+                return Result<bool>.Error(result.ErrorMessage);
+            }
+
+            return result.Value.Data.Any();
+        }
 
         public async Task<ISearchResponse<T>> Search(Func<SearchDescriptor<T>, ISearchRequest> selector) => await Client.SearchAsync(selector);
 
-        public async Task<AllResponse<T>> All(object query = null, IList<SortField> sort = null, string type = null)
+        public async Task<Result<AllResponse<T>>> All(object query = null, IList<SortField> sort = null, string type = null)
         {
-            ElasticsearchPagedResponse<T> response = await Paged(0, int.MaxValue, query, sort, type);
+            Result<ElasticsearchPagedResponse<T>> response = await Paged(0, int.MaxValue, query, sort, type);
+            if (!response)
+            {
+                return Result<AllResponse<T>>.Error(response.ErrorMessage);
+            }
+
             return new AllResponse<T>
             {
-                Data = response.AllData(),
-                TotalCount = response.TotalCount
+                Data = response.Value.AllData(),
+                TotalCount = response.Value.TotalCount
             };
         }
 
-        public async Task<ElasticsearchPagedResponse<T>> Paged(int pageNumber, int pageSize, object query = null, IList<SortField> sort = null, string type = null)
+        public Task<Result<ElasticsearchPagedResponse<T>>> Paged(int pageNumber, int pageSize, object query = null, IList<SortField> sort = null, string type = null)
         {
             QueryContainer queryContainer = query as QueryContainer;
             if (queryContainer == null && query != null)
@@ -81,10 +95,10 @@ namespace Pagination.Elasticsearch
                 }*/
             }
 
-            return await Paged(pageNumber, pageSize, queryContainer, sort, type);
+            return Paged(pageNumber, pageSize, queryContainer, sort, type);
         }
 
-        public async Task<ElasticsearchPagedResponse<T>> Paged(int pageNumber, int pageSize, QueryContainer query, IList<SortField> sort, string type = null)
+        public async Task<Result<ElasticsearchPagedResponse<T>>> Paged(int pageNumber, int pageSize, QueryContainer query, IList<SortField> sort, string type = null)
         {
             // If the page number was invalid, use the default page number.
             pageNumber = Math.Max(DefaultPageNumber, pageNumber);
@@ -118,28 +132,22 @@ namespace Pagination.Elasticsearch
                 {
                     string message = searchResponse.ServerError?.ToString() ?? searchResponse.OriginalException?.Message ?? searchResponse.ApiCall.ToString();
                     string debugInformation = searchResponse.DebugInformation?.ToString() ?? "No Debug Information";
-                    throw new InvalidOperationException(message + Environment.NewLine + debugInformation);
+                    return Result<ElasticsearchPagedResponse<T>>.Error(message + Environment.NewLine + debugInformation);
                 }
             }
 
             content.Data = searchResponse.Documents.ToArray();
             content.TotalCount = searchResponse.Total;
 
-            // If the page number is not in range, use the default search.
-            if (content.StartItemIndex > content.TotalCount)
-            {
-                return await Paged(-1, -1, query, sort);
-            }
-
             return content;
         }
 
         public async Task<Result<T>> Delete(string id)
         {
-            T deletedDocument = await Get(id);
-            if (deletedDocument == null)
+            Result<T> deletedDocument = await Get(id);
+            if (!deletedDocument)
             {
-                return Result<T>.Error($"No such object {id}");
+                return deletedDocument;
             }
 
             IDeleteResponse response = await Client.DeleteAsync<T>(id);

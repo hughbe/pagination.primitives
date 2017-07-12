@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net45;netstandard1.0</TargetFrameworks>
     <PackageId>Pagination.Primitives</PackageId>
-    <PackageVersion>1.0.0</PackageVersion>
+    <PackageVersion>1.0.1</PackageVersion>
     <Authors>Hugh Bellamy</Authors>
     <Title>Pagination.Primitives</Title>
     <Description>An abstraction layer for supporting pagination.</Description>

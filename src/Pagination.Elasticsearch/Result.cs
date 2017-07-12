@@ -2,7 +2,7 @@
 
 namespace Pagination.Elasticsearch
 {
-    public class Result<T>
+    public struct Result<T>
     {
         public string ErrorMessage { get; private set; }
         public T Value { get; private set; }
