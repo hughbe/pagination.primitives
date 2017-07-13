@@ -36,6 +36,7 @@ namespace Pagination.Elasticsearch
             {
                 return Result<T>.Error(response.ServerError?.ToString() ?? response.OriginalException.Message);
             }
+
             return data;
         }
 
@@ -43,10 +44,15 @@ namespace Pagination.Elasticsearch
         {
             if (string.IsNullOrWhiteSpace(id))
             {
-                return default(T);
+                return Result<T>.Error($"No such object with id {id}.");
             }
 
             IGetResponse<T> response = await Client.GetAsync<T>(id);
+            if (!response.Found)
+            {
+                return Result<T>.Error($"No such object with id {id}.");
+            }
+
             return response.Source;
         }
 
@@ -88,11 +94,7 @@ namespace Pagination.Elasticsearch
             if (queryContainer == null && query != null)
             {
                 string stringRepresentation = JsonConvert.SerializeObject(query, Formatting.Indented);
-                queryContainer = new QueryContainer(new RawQuery(stringRepresentation));/*
-                using (var stream = new MemoryStream(Encoding.UTF8.GetBytes(stringRepresentation)))
-                {
-                    queryContainer = Client.Serializer.Deserialize<QueryContainer>(stream);
-                }*/
+                queryContainer = new QueryContainer(new RawQuery(stringRepresentation));
             }
 
             return Paged(pageNumber, pageSize, queryContainer, sort, type);
