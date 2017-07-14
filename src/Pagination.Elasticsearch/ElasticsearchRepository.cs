@@ -47,7 +47,7 @@ namespace Pagination.Elasticsearch
                 return Result<T>.Error($"No such object with id {id}.");
             }
 
-            IGetResponse<T> response = await Client.GetAsync<T>(id);
+            IGetResponse<T> response= await Client.GetAsync<T>(id);
             if (!response.Found)
             {
                 return Result<T>.Error($"No such object with id {id}.");
