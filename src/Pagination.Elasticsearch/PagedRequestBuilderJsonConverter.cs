@@ -14,6 +14,7 @@ namespace Pagination.Elasticsearch
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             JObject jObject = JObject.Load(reader);
+
             PagedRequestBuilder instance = (PagedRequestBuilder)Activator.CreateInstance(objectType);
             serializer.Populate(jObject.CreateReader(), instance);
 

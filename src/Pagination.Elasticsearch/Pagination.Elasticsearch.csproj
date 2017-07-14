@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFrameworks>net46;netstandard1.3</TargetFrameworks>
     <PackageId>Pagination.Elasticsearch</PackageId>
-    <PackageVersion>1.0.6</PackageVersion>
+    <PackageVersion>1.0.7</PackageVersion>
     <Authors>Hugh Bellamy</Authors>
     <Title>Pagination.Elasticsearch</Title>
     <Description>An abstraction layer for supporting pagination in Elasticsearch.</Description>

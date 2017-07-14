@@ -59,6 +59,6 @@ namespace Pagination.Elasticsearch
 
         public override IEnumerable<QueryContainer> GetQuery() => Queries;
 
-        protected virtual IEnumerable<RequestFieldDescriptor> AllowedTerms { get; }
+        protected virtual IEnumerable<RequestFieldDescriptor> AllowedTerms { get; } = Enumerable.Empty<RequestFieldDescriptor>();
     }
 }

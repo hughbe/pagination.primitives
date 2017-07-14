@@ -10,6 +10,24 @@ namespace Pagination.Elasticsearch.Tests
     public class PagedRequestBuilderTests
     {
         [Fact]
+        public void Deserialize_EmptyTerms_Success()
+        {
+            var request = JsonConvert.DeserializeObject<ScrapeHistoryRequest>(@"{
+""orderingKey"": ""importStart"",
+""descending"": ""true""
+}");
+            QueryContainer[] queries = request.GetQuery().ToArray();
+            Assert.Empty(queries);
+
+            Assert.Equal("importStart", request.OrderingKey);
+            Assert.True(request.Descending);
+        }
+
+        public class ScrapeHistoryRequest : PagedRequestBuilder
+        {
+        }
+
+        [Fact]
         public void Deserialize_TermExistForTerms_Success()
         {
             var request = JsonConvert.DeserializeObject<Terms>(
